@@ -3,7 +3,7 @@ import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import RoomTypeSelector from "./RoomTypeSelector";
-import RoomSearchResults from "./RoomSearchresult";
+import RoomSearchResults from "./RoomSearchrResult";
 
 
 const RoomSearch = () => {
