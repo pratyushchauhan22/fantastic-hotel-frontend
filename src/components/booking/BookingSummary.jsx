@@ -46,7 +46,7 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
       </p>
       <p>
         Number of Days Booked :
-        <strong>{moment(numberOfDays).format("MM DD YYYY")}</strong>
+        <strong>{numberOfDays}</strong>
       </p>
       <div>
         <h5>Number of Guests</h5>
