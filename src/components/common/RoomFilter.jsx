@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
 const RoomFilter = ({data, setFilteredData}) => {
+
   const [filter, setFilter] = useState("");
 
   const handleSelectChange = (e) => {
-    const selectedRoomType = e.target.value;
-    setFilter(selectedRoomType);
+    const selectedType = e.target.value;
+    setFilter(selectedType);
     const filteredRooms = data.filter((room) =>
-      room.roomType.toLowerCase().includes(selectedRoomType.toLowerCase())
+      room.roomType.toLowerCase().includes(selectedType.toLowerCase())
     );
     setFilteredData(filteredRooms);
   };
@@ -25,7 +26,7 @@ const RoomFilter = ({data, setFilteredData}) => {
       </span>
       <select
       className="form-select"
-      aria-label="romm type filter"
+      aria-label="room type filter"
       value={filter}
       onChange={handleSelectChange}>
         <option value="">select a room type to filter....</option>

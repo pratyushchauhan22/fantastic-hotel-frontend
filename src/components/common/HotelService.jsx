@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import Header from "./Header";
-import { FaClock, FaUtensils, FaWifi } from "react-icons/fa";
+import { FaClock, FaAsterisk, FaGlassCheers, FaProductHunt, FaTshirt, FaUtensils, FaWifi } from "react-icons/fa";
+
 
 const HotelService = () => {
   return (
@@ -40,6 +41,58 @@ const HotelService = () => {
                 </Card.Title>
                 <Card.Text>
                   Start your day with a delicious breakfast buffet
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title className="hotel-color">
+                  <FaTshirt /> Laundry
+                </Card.Title>
+                <Card.Text>
+                Luxurious Laundry Services Tailored to You
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title className="hotel-color">
+                  <FaGlassCheers /> Mini-bar
+                </Card.Title>
+                <Card.Text>
+                Enjoy a refreshing drink or snack from our in room mini-bar
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title className="hotel-color">
+                  <FaProductHunt /> Parking
+                </Card.Title>
+                <Card.Text>
+                Park your vehicle coveniently in our on-site parking lot
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title className="hotel-color">
+                  <FaAsterisk/> Air conditioning
+                </Card.Title>
+                <Card.Text>
+                 Stay cool and confortable with our air conditioning system
                 </Card.Text>
               </Card.Body>
             </Card>

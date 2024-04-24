@@ -3,130 +3,121 @@ import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import RoomTypeSelector from "./RoomTypeSelector";
-import RoomSearchResults from "./RoomSearchrResult";
+import RoomSearchResults from "./RoomSearchResult";
 
 
 const RoomSearch = () => {
-  const [searchQuery, setSearchQuery] = useState({
-    checkInDate: "",
-    checkOutDate: "",
-    roomType: "",
-  });
+	const [searchQuery, setSearchQuery] = useState({
+		checkInDate: "",
+		checkOutDate: "",
+		roomType: ""
+	})
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [availableRooms, setAvailableRooms] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const checkIn = moment(searchQuery.checkInDate);
-    const checkOut = moment(searchQuery.checkOutDate);
-    if (!checkIn.isValid() || !checkOut.isValid()) {
-      setErrorMessage("Please enter valid date range");
-      return;
-    }
-    if (!checkOut.isSameOrAfter(checkIn)) {
-      setErrorMessage("Check-In Date must come before Check-Out date");
-      return;
-    }
-    setIsLoading(true);
-    getAvailableRooms(
-      searchQuery.checkInDate,
-      searchQuery.checkOutDate,
-      searchQuery.roomType
-    )
-      .then((response) => {
-        setAvailableRooms(response.data);
-        setTimeout(() => {
-          setIsLoading(false);
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const checkIn = moment(searchQuery.checkInDate);
-    const checkOut = moment(searchQuery.checkOutDate);
-    if (checkIn.isValid() && checkOut.isValid()) {
-      setErrorMessage("");
-    }
-  };
+	const [errorMessage, setErrorMessage] = useState("")
+	const [availableRooms, setAvailableRooms] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
 
-  const ClearSearch = () => {
-    setSearchQuery({
-      checkInDate: "",
-      checkOutDate: "",
-      roomType: "",
-    });
-  };
+	const handleSearch = (e) => {
+		e.preventDefault()
+		const checkInMoment = moment(searchQuery.checkInDate)
+		const checkOutMoment = moment(searchQuery.checkOutDate)
+		if (!checkInMoment.isValid() || !checkOutMoment.isValid()) {
+			setErrorMessage("Please enter valid dates")
+			return
+		}
+		if (!checkOutMoment.isSameOrAfter(checkInMoment)) {
+			setErrorMessage("Check-out date must be after check-in date")
+			return
+		}
+		setIsLoading(true)
+		getAvailableRooms(searchQuery.checkInDate, searchQuery.checkOutDate, searchQuery.roomType)
+			.then((response) => {
+				setAvailableRooms(response.data)
+				setTimeout(() => setIsLoading(false), 2000)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+			.finally(() => {
+				setIsLoading(false)
+			})
+	}
 
-  return (
-    <>
-      <Container className="mt-5 mb-5 py-5 shadow">
-        <Form onSubmit={handleSearch}>
-          <Row className="justify-content-center">
-            <Col xs={12} md={3}>
-              <Form.Group  controlId="checkInDate">
-                <Form.Label>Check-in date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="checkInDate"
-                  value={searchQuery.checkInDate}
-                  onChange={handleInputChange}
-                  min={moment().format("YYYY-MM-DD")}
-                />
-              </Form.Group>
-            </Col>
+	const handleInputChange = (e) => {
+		const { name, value } = e.target
+		setSearchQuery({ ...searchQuery, [name]: value })
+		const checkInDate = moment(searchQuery.checkInDate)
+		const checkOutDate = moment(searchQuery.checkOutDate)
+		if (checkInDate.isValid() && checkOutDate.isValid()) {
+			setErrorMessage("")
+		}
+	}
+	const handleClearSearch = () => {
+		setSearchQuery({
+			checkInDate: "",
+			checkOutDate: "",
+			roomType: ""
+		})
+		setAvailableRooms([])
+	}
 
-            <Col xs={12} md={3}>
-              <Form.Group controlId="checkOutDaten,">
-                <Form.Label>Check-out date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="checkOutDate"
-                  value={searchQuery.checkOutDate}
-                  onChange={handleInputChange}
-                  min={moment().format("YYYY-MM-DD")}
-                />
-              </Form.Group>
-            </Col>
+	return (
+		<>
+			<Container className="shadow mt-n5 mb-5 py-5">
+				<Form onSubmit={handleSearch}>
+					<Row className="justify-content-center">
+						<Col xs={12} md={3}>
+							<Form.Group controlId="checkInDate">
+								<Form.Label>Check-in Date</Form.Label>
+								<Form.Control
+									type="date"
+									name="checkInDate"
+									value={searchQuery.checkInDate}
+									onChange={handleInputChange}
+									min={moment().format("YYYY-MM-DD")}
+								/>
+							</Form.Group>
+						</Col>
+						<Col xs={12} md={3}>
+							<Form.Group controlId="checkOutDate">
+								<Form.Label>Check-out Date</Form.Label>
+								<Form.Control
+									type="date"
+									name="checkOutDate"
+									value={searchQuery.checkOutDate}
+									onChange={handleInputChange}
+									min={moment().format("YYYY-MM-DD")}
+								/>
+							</Form.Group>
+						</Col>
+						<Col xs={12} md={3}>
+							<Form.Group controlId="roomType">
+								<Form.Label>Room Type</Form.Label>
+								<div className="d-flex">
+									<RoomTypeSelector
+										handleRoomInputChange={handleInputChange}
+										newRoom={searchQuery}
+									/>
+									<Button variant="secondary" type="submit" className="ml-2">
+										Search
+									</Button>
+								</div>
+							</Form.Group>
+						</Col>
+					</Row>
+				</Form>
 
-            <Col xs={12} md={3}>
-              <Form.Group>
-                <Form.Label>Room Type</Form.Label>
-                <div className="d-flex">
-                    <RoomTypeSelector
-                    handleRoomInputChange={handleInputChange}
-                    newRoom={searchQuery}
-                    />
-                    <Button variant="secondary" type="submit" >Search</Button>
+				{isLoading ? (
+					<p className="mt-4">Finding availble rooms....</p>
+				) : availableRooms ? (
+					<RoomSearchResults results={availableRooms} onClearSearch={handleClearSearch} />
+				) : (
+					<p className="mt-4">No rooms available for the selected dates and room type.</p>
+				)}
+				{errorMessage && <p className="text-danger">{errorMessage}</p>}
+			</Container>
+		</>
+	)
+}
 
-
-
-                </div>
-                
-              </Form.Group>
-            </Col>
-          </Row>
-        </Form>
-        {isLoading ? (
-            <p>finding available rooms ...</p>
-        ): availableRooms ? (
-            <RoomSearchResults
-            results={availableRooms}
-            onClearSearch={ClearSearch}
-
-            />
-        ):(
-            <p>No roooms available for the selected dates and room type </p>
-        )}
-        {errorMessage && <p className="text-danger">{errorMessage}</p>}
-      </Container>
-    </>
-  );
-};
-export default RoomSearch;
+export default RoomSearch

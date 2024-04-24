@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../common/Header";
 import BookingsTable from "./BookingsTable";
+import { cancelBooking, getAllBookings } from "../utils/ApiFunctions";
 
 const Bookings = () =>{
     const[bookingInfo , setBookingInfo] = useState([])
@@ -9,10 +10,12 @@ const Bookings = () =>{
     
     useEffect(() =>{
         setTimeout(()=>{
-            getAllBookings(),then((data) =>{
+            getAllBookings()
+            .then((data) =>{
                 setBookingInfo(data)
                 setIsLoading(false)
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 setError(error.message)
                 setIsLoading(false)
 

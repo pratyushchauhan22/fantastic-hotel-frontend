@@ -4,78 +4,79 @@ import { useNavigate } from "react-router-dom"
 import moment from "moment"
 import { deleteUser, getBookingsByUserId, getUser } from "../components/utils/ApiFunctions";
 
-  const Profile = () => {
-        const [user, setUser] = useState({
-            id: "",
-            email: "",
-            firstName: "",
-            lastName: "",
-            roles: [{ id: "", name: "" }]
-        })
-    
-        const [bookings, setBookings] = useState([
-            {
-                id: "",
-                room: { id: "", roomType: "" },
-                checkInDate: "",
-                checkOutDate: "",
-                bookingConfirmationCode: ""
-            }
-        ])
-        const [message, setMessage] = useState("")
-        const [errorMessage, setErrorMessage] = useState("")
-        const navigate = useNavigate()
-    
-        const userId = localStorage.getItem("userId")
-        const token = localStorage.getItem("token")
-    
-        useEffect(() => {
-            const fetchUser = async () => {
-                try {
-                    const userData = await getUser(userId, token)
-                    setUser(userData)
-                } catch (error) {
-                    console.error(error)
-                }
-            }
-    
-            fetchUser()
-        }, [userId])
-    
-        useEffect(() => {
-            const fetchBookings = async () => {
-                try {
-                    const response = await getBookingsByUserId(userId, token)
-                    setBookings(response)
-                } catch (error) {
-                    console.error("Error fetching bookings:", error.message)
-                    setErrorMessage(error.message)
-                }
-            }
-    
-            fetchBookings()
-        }, [userId])
-    
-        const handleDeleteAccount = async () => {
-            const confirmed = window.confirm(
-                "Are you sure you want to delete your account? This action cannot be undone."
-            )
-            if (confirmed) {
-                await deleteUser(userId)
-                    .then((response) => {
-                        setMessage(response.data)
-                        localStorage.removeItem("token")
-                        localStorage.removeItem("userId")
-                        localStorage.removeItem("userRole")
-                        navigate("/")
-                        window.location.reload()
-                    })
-                    .catch((error) => {
-                        setErrorMessage(error.data)
-                    })
-            }
-        }
-    return (
+const Profile = () => {
+	const [user, setUser] = useState({
+		id: "",
+		email: "",
+		firstName: "",
+		lastName: "",
+		roles: [{ id: "", name: "" }]
+	})
+
+	const [bookings, setBookings] = useState([
+		{
+			id: "",
+			room: { id: "", roomType: "" },
+			checkInDate: "",
+			checkOutDate: "",
+			bookingConfirmationCode: ""
+		}
+	])
+	const [message, setMessage] = useState("")
+	const [errorMessage, setErrorMessage] = useState("")
+	const navigate = useNavigate()
+
+	const userId = localStorage.getItem("userId")
+	const token = localStorage.getItem("token")
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const userData = await getUser(userId, token)
+				setUser(userData)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+
+		fetchUser()
+	}, [userId])
+
+	useEffect(() => {
+		const fetchBookings = async () => {
+			try {
+				const response = await getBookingsByUserId(userId, token)
+				setBookings(response)
+			} catch (error) {
+				console.error("Error fetching bookings:", error.message)
+				setErrorMessage(error.message)
+			}
+		}
+
+		fetchBookings()
+	}, [userId])
+
+	const handleDeleteAccount = async () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to delete your account? This action cannot be undone."
+		)
+		if (confirmed) {
+			await deleteUser(userId)
+				.then((response) => {
+					setMessage(response.data)
+					localStorage.removeItem("token")
+					localStorage.removeItem("userId")
+					localStorage.removeItem("userRole")
+					navigate("/")
+					window.location.reload()
+				})
+				.catch((error) => {
+					setErrorMessage(error.data)
+				})
+		}
+	}
+
+	return (
 		<div className="container">
 			{errorMessage && <p className="text-danger">{errorMessage}</p>}
 			{message && <p className="text-danger">{message}</p>}

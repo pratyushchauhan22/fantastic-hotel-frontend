@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { registerUser } from "../components/utils/ApiFunctions";
+import { Link } from "react-router-dom"
 
 const Registration = () => {
   const [registration, setRegistration] = useState({

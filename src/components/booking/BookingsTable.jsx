@@ -2,7 +2,9 @@ import { parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import DateSlider from "../common/DateSlider";
 
+
 const BookingsTable =  ({bookingInfo, handleBookingCancellation}) =>{
+  
     const[filteredBookings, setFilteredBookings] = useState(bookingInfo)
     const filterBookings  = (startDate, endDate) =>{
         let filtered = bookingInfo
@@ -29,7 +31,7 @@ const BookingsTable =  ({bookingInfo, handleBookingCancellation}) =>{
                 <thead>
                     <tr>
                         <th>S/N</th>
-                        <th>booking ID</th>
+                        <th>Booking ID</th>
                         <th>Room ID</th>
                         <th>Room Type</th>
                         <th>Check-In Date</th>
